@@ -1,18 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SearchGifsResponse, Gif } from '../interfaces/gifs.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GifsService {
 
-
+//https://app.quicktype.io/  Para crear las interfaces
   private apiKey: string = '4y211eiS4j1zDE85zYFu2ITg6SYOX7ps'
 
   private _historial: string[] = [];
 
   //TODO: Cambiar any por su tipo respectivo.
-  public resultados: any[] = []
+  public resultados: Gif[] = []
 
   get historial(): string[] {
     return [...this._historial];
@@ -35,8 +36,8 @@ export class GifsService {
     this._historial = this._historial.splice(0,10);
 
     //Como se hace con observables
-    this.http.get(`https://api.giphy.com/v1/gifs/search?api_key=4y211eiS4j1zDE85zYFu2ITg6SYOX7ps&q=${ query }&limit=10`)
-          .subscribe( ( resp: any ) => {
+    this.http.get<SearchGifsResponse>(`https://api.giphy.com/v1/gifs/search?api_key=4y211eiS4j1zDE85zYFu2ITg6SYOX7ps&q=${ query }&limit=10`)
+          .subscribe( ( resp ) => {
             console.log( resp.data );
             this.resultados = resp.data;
           } )
